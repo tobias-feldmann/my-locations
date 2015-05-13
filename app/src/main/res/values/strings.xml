@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">MyLocations</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_places">Places</string>
+    <string name="action_ratings">Ratings</string>
+    <string name="title_activity_detail">DetailActivity</string>
+
+    <string name="title_activity_settings">Einstellungen</string>
+
+    <string name="value_1">Restaurant</string>
+    <string name="value_2">Sehenswürdigkeiten</string>
+    <string name="value_3">Shopping</string>
+
+</resources>

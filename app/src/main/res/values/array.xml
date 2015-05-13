@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="filter_entries">
+        <item>@string/value_1</item>
+        <item>@string/value_2</item>
+        <item>@string/value_3</item>
+    </string-array>
+
+    <string-array name="filter_keys">
+        <item>key1</item>
+        <item>key2</item>
+        <item>key3</item>
+    </string-array>
+
+</resources>
