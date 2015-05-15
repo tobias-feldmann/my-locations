@@ -32,7 +32,7 @@ public class RatingActivity extends ActionBarActivity {
     private GoogleApiClient mGoogleApiClient;
     private final int PLACE_PICKER_REQUEST = 1;
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
+    private RatingDataAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
     @Override
@@ -56,27 +56,6 @@ public class RatingActivity extends ActionBarActivity {
         PlacesController.getInstance().setMainActivity(this);
         PlacesUtil.showPlacesPicker();
 
-        ArrayList<RatingDataModel> testData = new ArrayList<RatingDataModel>();
-
-        RatingDataModel model1 = new RatingDataModel();
-        model1.setName("Pizzeria Test");
-        model1.setAddress("Musterstraße 1, 84030 Landshut");
-        model1.setComment("Restaurant");
-
-        RatingDataModel model2 = new RatingDataModel();
-        model2.setName("Poseidon");
-        model2.setAddress("Musterstraße 1, 84030 Landshut");
-        model2.setComment("Restaurant");
-
-        RatingDataModel model3 = new RatingDataModel();
-        model3.setName("Karstadt");
-        model3.setAddress("Musterstraße 1, 84030 Landshut");
-        model3.setComment("Shopping");
-
-        testData.add(model1);
-        testData.add(model2);
-        testData.add(model3);
-
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -98,8 +77,14 @@ public class RatingActivity extends ActionBarActivity {
         mRecyclerView.setLayoutManager(llm);
 
         // specify an adapter (see also next example)
-        mAdapter = new RatingDataAdapter(testData, this);
+        mAdapter = new RatingDataAdapter(this);
         mRecyclerView.setAdapter(mAdapter);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mAdapter.reloadData();
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

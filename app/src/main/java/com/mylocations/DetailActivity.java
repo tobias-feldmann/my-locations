@@ -10,13 +10,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.location.places.Place;
+import com.mylocations.database.DatabaseHandler;
 import com.mylocations.places.PlacesController;
 import com.mylocations.places.PlacesUtil;
+import com.mylocations.ratings.RatingDataModel;
 import com.mylocations.utils.LocationTypes;
 
 import java.util.List;
@@ -26,6 +30,7 @@ public class DetailActivity extends ActionBarActivity {
 
     private PlacesController placesController;
     private Place currentPlace;
+    private RatingDataModel ratingDataModel;
 
     private TextView name;
     private TextView type;
@@ -33,8 +38,10 @@ public class DetailActivity extends ActionBarActivity {
     private TextView website;
     private TextView phone;
 
+    private EditText commentEdit;
     private Spinner spinner;
     private ImageView ratingImage;
+    private DatabaseHandler databaseHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,25 +55,45 @@ public class DetailActivity extends ActionBarActivity {
 //        bar.setTitle(text);
 //        bar.setIcon(new ColorDrawable(getResources().getColor(android.R.color.transparent)));
         bar.setDisplayHomeAsUpEnabled(true);
+
+        databaseHandler = new DatabaseHandler(this);
         placesController = PlacesController.getInstance();
         currentPlace = placesController.getPlace();
 
+        ratingDataModel = databaseHandler.getRating(currentPlace.getId());
+
+        if(ratingDataModel == null)
+        {
+            ratingDataModel = new RatingDataModel();
+            ratingDataModel.setId(currentPlace.getId());
+            ratingDataModel.setName(currentPlace.getName().toString());
+            ratingDataModel.setAddress(currentPlace.getAddress().toString());
+            ratingDataModel.setPhoneNumber(currentPlace.getPhoneNumber().toString());
+            ratingDataModel.setPlaceTypes(typesToString(currentPlace.getPlaceTypes()));
+            Uri websiteUri = currentPlace.getWebsiteUri();
+            ratingDataModel.setWebsite(websiteUri == null ? "" : websiteUri.toString());
+            ratingDataModel.setNorthEastLatitude(placesController.getBounds().northeast.latitude);
+            ratingDataModel.setNorthEastLongitude(placesController.getBounds().northeast.longitude);
+            ratingDataModel.setSouthWestLatitude(placesController.getBounds().southwest.latitude);
+            ratingDataModel.setSouthWestLongitude(placesController.getBounds().southwest.longitude);
+            ratingDataModel.setPrivateRating(0);
+            ratingDataModel.setComment("");
+        }
+
         name = (TextView) findViewById(R.id.detail_name);
-        name.setText(placesController.getPlace().getName());
+        name.setText(ratingDataModel.getName());
 
         address = (TextView) findViewById(R.id.detail_address);
-        address.setText(placesController.getPlace().getAddress());
+        address.setText(ratingDataModel.getAddress());
 
         phone = (TextView) findViewById(R.id.detail_phone);
-        phone.setText(placesController.getPlace().getPhoneNumber());
+        phone.setText(ratingDataModel.getPhoneNumber());
 
         type = (TextView) findViewById(R.id.detail_type);
-        type.setText(typesToString(placesController.getPlace().getPlaceTypes()));
+        type.setText(ratingDataModel.getPlaceTypes());
 
         website = (TextView) findViewById(R.id.detail_website);
-
-        Uri websiteUri = placesController.getPlace().getWebsiteUri();
-        website.setText(websiteUri == null ? "" : websiteUri.toString());
+        website.setText(ratingDataModel.getWebsite());
 
         ratingImage = (ImageView) findViewById(R.id.imageView);
         ratingImage.setOnClickListener(new View.OnClickListener() {
@@ -75,6 +102,8 @@ public class DetailActivity extends ActionBarActivity {
                 spinner.performClick();
             }
         });
+        commentEdit = (EditText) findViewById(R.id.commentEdit);
+        commentEdit.setText(ratingDataModel.getComment());
 
         spinner = (Spinner) findViewById(R.id.rating_spinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
@@ -102,7 +131,7 @@ public class DetailActivity extends ActionBarActivity {
             }
         });
 
-        spinner.setSelection(0,true);
+        spinner.setSelection(ratingDataModel.getPrivateRating(),true);
 
     }
 
@@ -118,6 +147,23 @@ public class DetailActivity extends ActionBarActivity {
             }
         }
         return returnString;
+    }
+
+    private void saveObject()
+    {
+        ratingDataModel.setComment(commentEdit.getText().toString());
+        ratingDataModel.setPrivateRating(spinner.getSelectedItemPosition());
+        ratingDataModel.setTimestamp(System.currentTimeMillis());
+
+        if(databaseHandler.existRating(ratingDataModel.getId()))
+        {
+            databaseHandler.updateRating(ratingDataModel);
+        }
+        else
+        {
+            databaseHandler.addRating(ratingDataModel);
+        }
+
     }
 
 
@@ -144,7 +190,8 @@ public class DetailActivity extends ActionBarActivity {
         }
         else if(id == R.id.action_save)
         {
-
+            saveObject();
+            Toast.makeText(this, "Bewertung gespeichert", Toast.LENGTH_SHORT).show();
         }
 
         return super.onOptionsItemSelected(item);

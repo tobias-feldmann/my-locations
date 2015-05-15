@@ -7,10 +7,10 @@ import java.util.ArrayList;
  */
 public class RatingDataModel {
 
-    private int id;
+    private String id;
     private String name;
     private String address;
-    private ArrayList<Integer> placeTypes;
+    private String placeTypes;
     private String phoneNumber;
     private int priceLevel;
     private float rating;
@@ -29,11 +29,11 @@ public class RatingDataModel {
     public RatingDataModel() {
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -61,11 +61,11 @@ public class RatingDataModel {
         this.address = address;
     }
 
-    public ArrayList<Integer> getPlaceTypes() {
+    public String getPlaceTypes() {
         return placeTypes;
     }
 
-    public void setPlaceTypes(ArrayList<Integer> placeTypes) {
+    public void setPlaceTypes(String placeTypes) {
         this.placeTypes = placeTypes;
     }
 

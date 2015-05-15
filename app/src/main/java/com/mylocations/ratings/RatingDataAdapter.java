@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 
 import com.mylocations.R;
+import com.mylocations.database.DatabaseHandler;
 
 import java.util.ArrayList;
 
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 public class RatingDataAdapter extends RecyclerView.Adapter<RatingDataAdapter.ViewHolder> {
 
     private ArrayList<RatingDataModel> mDataset;
+    private DatabaseHandler databaseHandler;
     private Context context;
 
     // Provide a reference to the views for each data item
@@ -31,20 +33,19 @@ public class RatingDataAdapter extends RecyclerView.Adapter<RatingDataAdapter.Vi
         public TextView mTypeTextView;
         public TextView mAddressTextView;
         public ImageView mImageView;
-        public ImageView mLocationImageView;
         public ViewHolder(View v) {
             super(v);
             mNameTextView = (TextView)v.findViewById(R.id.location_name);
             mTypeTextView = (TextView)v.findViewById(R.id.location_type);
             mAddressTextView = (TextView)v.findViewById(R.id.loction_address);
             mImageView = (ImageView)v.findViewById(R.id.imageView);
-            //mLocationImageView = (ImageView)v.findViewById(R.id.locationImage);
         }
     }
 
-    public RatingDataAdapter(ArrayList<RatingDataModel> myDataset, Context context) {
-        mDataset = myDataset;
+    public RatingDataAdapter(Context context) {
         this.context = context;
+        databaseHandler = new DatabaseHandler(context);
+        mDataset = new ArrayList<>();
     }
 
     // Create new views (invoked by the layout manager)
@@ -64,13 +65,15 @@ public class RatingDataAdapter extends RecyclerView.Adapter<RatingDataAdapter.Vi
         RatingDataModel dataModel = mDataset.get(position);
         holder.mNameTextView.setText(dataModel.getName());
         holder.mNameTextView.setTypeface(Typeface.DEFAULT_BOLD);
-        holder.mTypeTextView.setText(dataModel.getComment());
+        holder.mTypeTextView.setText(dataModel.getPlaceTypes());
         holder.mAddressTextView.setText(dataModel.getAddress());
 
-//        holder.mDateTimeTextView.setText(dataModel.getEventDateTime());
-//        holder.mDistanceTextView.setText(dataModel.getDistance());
-//        holder.mPeopleCountTextView.setText(dataModel.getPeopleCount());
-
+        switch (dataModel.getPrivateRating())
+        {
+            case 0 : holder.mImageView.setImageResource(R.drawable.ampel_green); break;
+            case 1 : holder.mImageView.setImageResource(R.drawable.ampel_yellow); break;
+            case 2 : holder.mImageView.setImageResource(R.drawable.ampel_red); break;
+        }
 
     }
 
@@ -78,5 +81,11 @@ public class RatingDataAdapter extends RecyclerView.Adapter<RatingDataAdapter.Vi
     @Override
     public int getItemCount() {
         return mDataset.size();
+    }
+
+    public void reloadData()
+    {
+        mDataset = databaseHandler.getAllRatings();
+        this.notifyDataSetChanged();
     }
 }

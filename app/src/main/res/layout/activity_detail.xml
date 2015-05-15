@@ -118,6 +118,7 @@
                     android:layout_height="80dp" />
 
                 <EditText
+                    android:id="@+id/commentEdit"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="top"

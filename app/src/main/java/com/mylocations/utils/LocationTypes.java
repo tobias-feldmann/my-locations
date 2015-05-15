@@ -107,7 +107,11 @@ public enum LocationTypes {
 
     public static String getType(int position)
     {
-        LocationTypes type = values()[position];
+        LocationTypes[] types = values();
+        if(position > types.length)
+            return LocationTypes.anderes.name();
+
+        LocationTypes type = types[position];
         return type.name();
     }
 }
