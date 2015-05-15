@@ -38,7 +38,7 @@ public class RatingDataAdapter extends RecyclerView.Adapter<RatingDataAdapter.Vi
             mTypeTextView = (TextView)v.findViewById(R.id.location_type);
             mAddressTextView = (TextView)v.findViewById(R.id.loction_address);
             mImageView = (ImageView)v.findViewById(R.id.imageView);
-            mLocationImageView = (ImageView)v.findViewById(R.id.locationImage);
+            //mLocationImageView = (ImageView)v.findViewById(R.id.locationImage);
         }
     }
 
@@ -66,6 +66,7 @@ public class RatingDataAdapter extends RecyclerView.Adapter<RatingDataAdapter.Vi
         holder.mNameTextView.setTypeface(Typeface.DEFAULT_BOLD);
         holder.mTypeTextView.setText(dataModel.getComment());
         holder.mAddressTextView.setText(dataModel.getAddress());
+
 //        holder.mDateTimeTextView.setText(dataModel.getEventDateTime());
 //        holder.mDistanceTextView.setText(dataModel.getDistance());
 //        holder.mPeopleCountTextView.setText(dataModel.getPeopleCount());

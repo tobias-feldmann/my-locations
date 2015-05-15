@@ -91,7 +91,6 @@ public class RatingActivity extends ActionBarActivity {
         // in content do not change the layout size of the RecyclerView
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
-
         // use a linear layout manager
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);

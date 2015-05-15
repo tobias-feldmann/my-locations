@@ -1,106 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginTop="10dp"
-    android:layout_marginBottom="10dp"
-    android:layout_marginLeft="5dp"
-    >
+<com.daimajia.swipe.SwipeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content">
+    <!-- Bottom View Start-->
+    <LinearLayout
+        android:background="#38aae1"
+        android:id="@+id/bottom_wrapper"
+        android:orientation="horizontal"
+        android:layout_width="160dp"
+        android:weightSum="1"
+        android:layout_height="match_parent">
 
-    <ImageView
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/imageView"
-        android:src="@drawable/ampel_green"
-        android:scaleType="fitCenter"
-        android:layout_width="60dp"
-        android:layout_height="60dp" />
+        <ImageView
+            android:id="@+id/remove"
+            android:src="@drawable/ic_delete_white_48dp"
+            android:layout_margin="15dp"
+            android:layout_gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Tobias Feldmann"
-        android:textSize="16sp"
-        android:layout_marginLeft="10dp"
-        android:fontFamily="sans-serif-light"
+        <ImageView
+            android:id="@+id/position"
+            android:src="@drawable/ic_my_location_white_48dp"
+            android:layout_margin="15dp"
+            android:layout_gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+
+
+        <!--What you want to show-->
+    </LinearLayout>
+    <!-- Bottom View End-->
+
+    <!-- Surface View Start -->
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_marginTop="5dp"
-        android:textStyle="bold"
-        android:layout_toRightOf="@+id/imageView"
-        android:id="@+id/location_name" />
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="5dp"
+        >
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Mobile App Developer"
-        android:textSize="14sp"
-        android:layout_marginLeft="10dp"
-        android:fontFamily="sans-serif-light"
-        android:layout_below="@+id/location_name"
-        android:layout_marginTop="3dp"
-        android:layout_toRightOf="@+id/imageView"
-        android:id="@+id/location_type" />
+        <ImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/imageView"
+            android:src="@drawable/ampel_green"
+            android:scaleType="fitCenter"
+            android:layout_gravity="center_vertical"
+            android:layout_width="70dp"
+            android:layout_height="70dp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Mobile App Developer"
-        android:textSize="14sp"
-        android:layout_marginLeft="10dp"
-        android:fontFamily="sans-serif-light"
-        android:layout_below="@+id/location_type"
-        android:layout_marginTop="3dp"
-        android:layout_toRightOf="@+id/imageView"
-        android:id="@+id/loction_address" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:orientation="vertical">
 
-    <!--<TextView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="11.01.2015 - 18:00 Uhr"-->
-        <!--android:textSize="14sp"-->
-        <!--android:layout_marginLeft="10dp"-->
-        <!--android:fontFamily="sans-serif-bold"-->
-        <!--android:layout_below="@+id/loction_address"-->
-        <!--android:layout_marginTop="10dp"-->
-        <!--android:layout_toRightOf="@+id/imageView"-->
-        <!--android:id="@+id/datetime" />-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tobias Feldmann"
+                android:textSize="16sp"
+                android:fontFamily="sans-serif-light"
+                android:textStyle="bold"
+                android:layout_marginBottom="2dp"
+                android:id="@+id/location_name" />
 
-    <ImageView
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:id="@+id/locationImage"
-        android:src="@drawable/ic_my_location_grey600_48dp"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="20dp"/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="2dp"
+                android:orientation="horizontal">
 
-    <!--<ImageView-->
-        <!--android:layout_width="30dp"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:id="@+id/peopleImage"-->
-        <!--android:layout_alignParentTop="true"-->
-        <!--android:src="@drawable/ic_people_grey600_48dp"-->
-        <!--android:layout_toLeftOf="@+id/distanceImage"-->
-        <!--android:layout_marginRight="22dp"-->
-        <!--/>-->
+                <ImageView
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/iconType"
+                    android:src="@drawable/ic_account_balance_grey600_48dp"
+                    android:scaleType="fitCenter"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp" />
 
-    <!--<TextView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="2 / 6"-->
-        <!--android:fontFamily="sans-serif-light"-->
-        <!--android:id="@+id/peopleText"-->
-        <!--android:layout_toLeftOf="@+id/distanceText"-->
-        <!--android:layout_marginRight="20dp"-->
-        <!--android:layout_below="@+id/peopleImage"/>-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Mobile App Developer"
+                    android:textSize="14sp"
+                    android:fontFamily="sans-serif-light"
+                    android:layout_marginTop="5dp"
+                    android:id="@+id/location_type" />
 
-    <!--<TextView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="10 km"-->
-        <!--android:fontFamily="sans-serif-light"-->
-        <!--android:id="@+id/distanceText"-->
-        <!--android:layout_alignParentRight="true"-->
-        <!--android:layout_marginRight="10dp"-->
-        <!--android:layout_below="@+id/distanceImage"/>-->
-</RelativeLayout>
+            </LinearLayout>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mobile App Developer"
+                android:textSize="14sp"
+                android:fontFamily="sans-serif-light"
+                android:id="@+id/loction_address" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Surface View End -->
+</com.daimajia.swipe.SwipeLayout>
+
+

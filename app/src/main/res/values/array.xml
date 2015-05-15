@@ -12,4 +12,10 @@
         <item>key3</item>
     </string-array>
 
+    <string-array name="rating_values">
+        <item>Empfehlenswert</item>
+        <item>Durchschnittlich</item>
+        <item>Ungeeignet</item>
+    </string-array>
+
 </resources>
