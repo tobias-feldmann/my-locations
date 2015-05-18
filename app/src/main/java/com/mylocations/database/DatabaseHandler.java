@@ -50,6 +50,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String KEY_PRIVATE_RATING = "private_rating";
     private static final String KEY_COMMENT = "comment";
 
+    private static final String KEY_LATITUDE = "latitude";
+    private static final String KEY_LONGITUDE = "longitude";
+
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -63,7 +66,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + KEY_PRICE_LEVEL + " INTEGER," + KEY_RATING + " REAL," + KEY_WEBSITE + " TEXT,"
                 + KEY_TIMESTAMP + " INTEGER," + KEY_SOUTHWEST_LATITUDE + " REAL," + KEY_SOUTHWEST_LONGITUDE + " REAL,"
                 + KEY_NORTHEAST_LATITUDE + " REAL," + KEY_NORTHEAST_LONGITUDE + " REAL,"
-                + KEY_PRIVATE_RATING + " INTEGER," + KEY_COMMENT + " TEXT" + ")";
+                + KEY_PRIVATE_RATING + " INTEGER," + KEY_COMMENT + " TEXT," +  KEY_LATITUDE + " REAL," + KEY_LONGITUDE + " REAL" + ")";
         db.execSQL(CREATE_CONTACTS_TABLE);
     }
 
@@ -91,7 +94,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         Cursor cursor = db.query(TABLE_RATINGS, new String[] { KEY_ID,
                         KEY_NAME, KEY_ADDRESS, KEY_PLACE_TYPES, KEY_PHONE_NUMBER, KEY_PRICE_LEVEL,
                         KEY_RATING, KEY_WEBSITE, KEY_TIMESTAMP, KEY_SOUTHWEST_LATITUDE, KEY_SOUTHWEST_LONGITUDE,
-                        KEY_NORTHEAST_LATITUDE, KEY_NORTHEAST_LONGITUDE, KEY_PRIVATE_RATING, KEY_COMMENT}, KEY_ID + "=?",
+                        KEY_NORTHEAST_LATITUDE, KEY_NORTHEAST_LONGITUDE, KEY_PRIVATE_RATING, KEY_COMMENT, KEY_LATITUDE, KEY_LONGITUDE}, KEY_ID + "=?",
                 new String[] { String.valueOf(id) }, null, null, null, null);
 
         if(cursor == null || cursor.getCount() == 0 )
@@ -109,13 +112,26 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         Cursor cursor = db.query(TABLE_RATINGS, new String[] { KEY_ID,
                         KEY_NAME, KEY_ADDRESS, KEY_PLACE_TYPES, KEY_PHONE_NUMBER, KEY_PRICE_LEVEL,
                         KEY_RATING, KEY_WEBSITE, KEY_TIMESTAMP, KEY_SOUTHWEST_LATITUDE, KEY_SOUTHWEST_LONGITUDE,
-                        KEY_NORTHEAST_LATITUDE, KEY_NORTHEAST_LONGITUDE, KEY_PRIVATE_RATING, KEY_COMMENT}, KEY_ID + "=?",
+                        KEY_NORTHEAST_LATITUDE, KEY_NORTHEAST_LONGITUDE, KEY_PRIVATE_RATING, KEY_COMMENT, KEY_LATITUDE, KEY_LONGITUDE}, KEY_ID + "=?",
                 new String[] { String.valueOf(id) }, null, null, null, null);
 
         if(cursor == null || cursor.getCount() == 0 )
             return false;
         else
             return true;
+    }
+
+    public boolean isEmpty() {
+        // Select All Query
+        String selectQuery = "SELECT  * FROM " + TABLE_RATINGS;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if(cursor == null || cursor.getCount() == 0 )
+            return true;
+        else
+            return false;
     }
 
     public ArrayList<RatingDataModel> getAllRatings() {
@@ -173,6 +189,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(KEY_NORTHEAST_LONGITUDE, rating.getNorthEastLongitude());
         values.put(KEY_PRIVATE_RATING, rating.getPrivateRating());
         values.put(KEY_COMMENT, rating.getComment());
+        values.put(KEY_LATITUDE, rating.getLatitude());
+        values.put(KEY_LONGITUDE, rating.getLongitude());
         return values;
     }
 
@@ -187,13 +205,15 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         rating.setPriceLevel(Integer.parseInt(cursor.getString(5)));
         rating.setRating(Float.parseFloat(cursor.getString(6)));
         rating.setWebsite(cursor.getString(7));
-        rating.setTimestamp(Integer.parseInt(cursor.getString(8))*1000);
+        rating.setTimestamp(Integer.parseInt(cursor.getString(8)) * 1000);
         rating.setSouthWestLatitude(Double.parseDouble(cursor.getString(9)));
         rating.setSouthWestLongitude(Double.parseDouble(cursor.getString(10)));
         rating.setNorthEastLatitude(Double.parseDouble(cursor.getString(11)));
         rating.setNorthEastLongitude(Double.parseDouble(cursor.getString(12)));
         rating.setPrivateRating(Integer.parseInt(cursor.getString(13)));
         rating.setComment(cursor.getString(14));
+        rating.setLatitude(Double.parseDouble(cursor.getString(15)));
+        rating.setLongitude(Double.parseDouble(cursor.getString(16)));
         return rating;
     }
 

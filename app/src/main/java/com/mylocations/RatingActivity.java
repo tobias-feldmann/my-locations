@@ -18,6 +18,7 @@ import android.view.View;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.melnykov.fab.FloatingActionButton;
+import com.mylocations.database.DatabaseHandler;
 import com.mylocations.places.PlacesController;
 import com.mylocations.places.PlacesUtil;
 import com.mylocations.ratings.RatingDataAdapter;
@@ -34,6 +35,7 @@ public class RatingActivity extends ActionBarActivity {
     private RecyclerView mRecyclerView;
     private RatingDataAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    private DatabaseHandler databaseHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,9 +54,12 @@ public class RatingActivity extends ActionBarActivity {
 //                .addConnectionCallbacks(this)
 //                .addOnConnectionFailedListener(this)
 //                .build();
-
         PlacesController.getInstance().setMainActivity(this);
-        PlacesUtil.showPlacesPicker();
+        databaseHandler = new DatabaseHandler(this);
+        if(databaseHandler.isEmpty())
+        {
+            PlacesUtil.showPlacesPicker();
+        }
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);

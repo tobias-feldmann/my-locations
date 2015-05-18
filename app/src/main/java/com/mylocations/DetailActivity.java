@@ -1,17 +1,22 @@
 package com.mylocations;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,6 +25,7 @@ import com.google.android.gms.location.places.Place;
 import com.mylocations.database.DatabaseHandler;
 import com.mylocations.places.PlacesController;
 import com.mylocations.places.PlacesUtil;
+import com.mylocations.ratings.RatingDataAdapter;
 import com.mylocations.ratings.RatingDataModel;
 import com.mylocations.utils.LocationTypes;
 
@@ -42,6 +48,9 @@ public class DetailActivity extends ActionBarActivity {
     private Spinner spinner;
     private ImageView ratingImage;
     private DatabaseHandler databaseHandler;
+    private boolean isFromMain;
+
+    public static String RATING_ID = "rating_id";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +69,22 @@ public class DetailActivity extends ActionBarActivity {
         placesController = PlacesController.getInstance();
         currentPlace = placesController.getPlace();
 
-        ratingDataModel = databaseHandler.getRating(currentPlace.getId());
+        String id = null;
+        Intent intent = getIntent();
+        if(intent != null)
+          id = intent.getStringExtra(RATING_ID);
+
+        if(id != null)
+        {
+            ratingDataModel = databaseHandler.getRating(id);
+            isFromMain = true;
+        }
+        else
+        {
+            ratingDataModel = databaseHandler.getRating(currentPlace.getId());
+            isFromMain = false;
+        }
+
 
         if(ratingDataModel == null)
         {
@@ -76,6 +100,8 @@ public class DetailActivity extends ActionBarActivity {
             ratingDataModel.setNorthEastLongitude(placesController.getBounds().northeast.longitude);
             ratingDataModel.setSouthWestLatitude(placesController.getBounds().southwest.latitude);
             ratingDataModel.setSouthWestLongitude(placesController.getBounds().southwest.longitude);
+            ratingDataModel.setLongitude(currentPlace.getLatLng().longitude);
+            ratingDataModel.setLatitude(currentPlace.getLatLng().latitude);
             ratingDataModel.setPrivateRating(0);
             ratingDataModel.setComment("");
         }
@@ -115,11 +141,16 @@ public class DetailActivity extends ActionBarActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-                switch (position)
-                {
-                    case 0 : ratingImage.setImageResource(R.drawable.ampel_green); break;
-                    case 1 : ratingImage.setImageResource(R.drawable.ampel_yellow); break;
-                    case 2 : ratingImage.setImageResource(R.drawable.ampel_red); break;
+                switch (position) {
+                    case 0:
+                        ratingImage.setImageResource(R.drawable.ampel_green);
+                        break;
+                    case 1:
+                        ratingImage.setImageResource(R.drawable.ampel_yellow);
+                        break;
+                    case 2:
+                        ratingImage.setImageResource(R.drawable.ampel_red);
+                        break;
                 }
 
 
@@ -131,7 +162,23 @@ public class DetailActivity extends ActionBarActivity {
             }
         });
 
-        spinner.setSelection(ratingDataModel.getPrivateRating(),true);
+        spinner.setSelection(ratingDataModel.getPrivateRating(), true);
+
+        LinearLayout detailLayout = (LinearLayout) findViewById(R.id.detailLayout);
+        detailLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                disableCommentEdit();
+            }
+        });
+
+        CardView cardView = (CardView) findViewById(R.id.card_details);
+        cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                disableCommentEdit();
+            }
+        });
 
     }
 
@@ -167,7 +214,6 @@ public class DetailActivity extends ActionBarActivity {
     }
 
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -184,8 +230,16 @@ public class DetailActivity extends ActionBarActivity {
         //noinspection SimplifiableIfStatement
         if (id == android.R.id.home)
         {
-            PlacesUtil.showPlacesPicker(placesController.getBounds());
-            finish();
+            if(isFromMain)
+            {
+                Intent intent = new Intent(this, RatingActivity.class);
+                startActivity(intent);
+            }
+            else
+            {
+                PlacesUtil.showPlacesPicker(ratingDataModel.getBounds());
+                finish();
+            }
             return true;
         }
         else if(id == R.id.action_save)
@@ -195,5 +249,12 @@ public class DetailActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void disableCommentEdit()
+    {
+        commentEdit.clearFocus();
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(commentEdit.getWindowToken(), 0);
     }
 }

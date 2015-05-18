@@ -1,6 +1,7 @@
 package com.mylocations.ratings;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,8 +12,10 @@ import android.widget.TextView;
 
 
 import com.daimajia.swipe.SwipeLayout;
+import com.mylocations.DetailActivity;
 import com.mylocations.R;
 import com.mylocations.database.DatabaseHandler;
+import com.mylocations.places.PlacesUtil;
 
 import java.util.ArrayList;
 
@@ -72,6 +75,31 @@ public class RatingDataAdapter extends RecyclerView.Adapter<RatingDataAdapter.Vi
                 databaseHandler.deleteRating(id);
                 swipeLayout.close();
                 reloadData();
+
+            }
+        });
+
+        ImageView locateImage = (ImageView) v.findViewById(R.id.position);
+        locateImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String id = (String)((View)(v.getParent().getParent())).getTag();
+                RatingDataModel model = databaseHandler.getRating(id);
+                PlacesUtil.showPlacesPicker(model.getBounds());
+                swipeLayout.close();
+
+            }
+        });
+
+        ImageView openImage = (ImageView) v.findViewById(R.id.open);
+        openImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String id = (String)((View)(v.getParent().getParent())).getTag();
+                Intent intent = new Intent(context, DetailActivity.class);
+                intent.putExtra(DetailActivity.RATING_ID, id);
+                context.startActivity(intent);
+                swipeLayout.close();
 
             }
         });

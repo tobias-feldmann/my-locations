@@ -1,5 +1,9 @@
 package com.mylocations.ratings;
 
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.mylocations.places.PlacesUtil;
+
 import java.util.ArrayList;
 
 /**
@@ -22,6 +26,9 @@ public class RatingDataModel {
     private double southWestLongitude;
     private double northEastLatitude;
     private double northEastLongitude;
+
+    private double latitude;
+    private double longitude;
 
     private int privateRating;
     private String comment;
@@ -133,6 +140,22 @@ public class RatingDataModel {
         this.northEastLongitude = northEastLongitude;
     }
 
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
     public int getPrivateRating() {
         return privateRating;
     }
@@ -147,5 +170,10 @@ public class RatingDataModel {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public LatLngBounds getBounds()
+    {
+        return PlacesUtil.createBoundsWithMinDiagonal((new LatLng(getLatitude(), getLongitude())));
     }
 }
