@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
+import com.daimajia.swipe.SwipeLayout;
 import com.mylocations.R;
 import com.mylocations.database.DatabaseHandler;
 
@@ -53,7 +54,28 @@ public class RatingDataAdapter extends RecyclerView.Adapter<RatingDataAdapter.Vi
     public RatingDataAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // create a new view
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.rating_list_item, parent, false);
+        final SwipeLayout swipeLayout = (SwipeLayout) v.findViewById(R.id.swipeLayout);
         // set the view's size, margins, paddings and layout parameters
+        v.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String id = (String) v.getTag();
+
+            }
+        });
+
+        ImageView deleteImage = (ImageView) v.findViewById(R.id.remove);
+        deleteImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String id = (String)((View)(v.getParent().getParent())).getTag();
+                databaseHandler.deleteRating(id);
+                swipeLayout.close();
+                reloadData();
+
+            }
+        });
+
         return new ViewHolder(v);
     }
 
@@ -67,7 +89,7 @@ public class RatingDataAdapter extends RecyclerView.Adapter<RatingDataAdapter.Vi
         holder.mNameTextView.setTypeface(Typeface.DEFAULT_BOLD);
         holder.mTypeTextView.setText(dataModel.getPlaceTypes());
         holder.mAddressTextView.setText(dataModel.getAddress());
-
+        holder.itemView.setTag(dataModel.getId());
         switch (dataModel.getPrivateRating())
         {
             case 0 : holder.mImageView.setImageResource(R.drawable.ampel_green); break;

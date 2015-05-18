@@ -148,10 +148,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 new String[] { String.valueOf(rating.getId()) });
     }
 
-    public void deleteRating(RatingDataModel rating) {
+    public void deleteRating(String id) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_RATINGS, KEY_ID + " = ?",
-                new String[] { String.valueOf(rating.getId()) });
+                new String[] { String.valueOf(id) });
         db.close();
     }
 
