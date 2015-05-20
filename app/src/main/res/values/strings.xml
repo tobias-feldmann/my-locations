@@ -9,8 +9,8 @@
 
     <string name="title_activity_settings">Einstellungen</string>
 
-    <string name="value_1">Restaurant</string>
-    <string name="value_2">Sehenswürdigkeiten</string>
-    <string name="value_3">Shopping</string>
+    <string name="sort_value_1">Locationbewertung</string>
+    <string name="sort_value_2">Locationname</string>
+    <string name="sort_value_3">Locationtyp</string>
 
 </resources>

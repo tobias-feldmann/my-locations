@@ -2,7 +2,9 @@ package com.mylocations.ratings;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import android.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,8 +18,10 @@ import com.mylocations.DetailActivity;
 import com.mylocations.R;
 import com.mylocations.database.DatabaseHandler;
 import com.mylocations.places.PlacesUtil;
+import com.mylocations.utils.RatingComparators;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Created by Tobias Feldmann on 23.12.14.
@@ -58,6 +62,37 @@ public class RatingDataAdapter extends RecyclerView.Adapter<RatingDataAdapter.Vi
         // create a new view
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.rating_list_item, parent, false);
         final SwipeLayout swipeLayout = (SwipeLayout) v.findViewById(R.id.swipeLayout);
+        swipeLayout.addSwipeListener(new SwipeLayout.SwipeListener() {
+            @Override
+            public void onClose(SwipeLayout layout) {
+                //when the SurfaceView totally cover the BottomView.
+            }
+
+            @Override
+            public void onUpdate(SwipeLayout layout, int leftOffset, int topOffset) {
+                //you are swiping.
+            }
+
+            @Override
+            public void onStartOpen(SwipeLayout layout) {
+                layout.close(true);
+            }
+
+            @Override
+            public void onOpen(SwipeLayout layout) {
+                //when the BottomView totally show.
+            }
+
+            @Override
+            public void onStartClose(SwipeLayout layout) {
+
+            }
+
+            @Override
+            public void onHandRelease(SwipeLayout layout, float xvel, float yvel) {
+                //when user's hand released.
+            }
+        });
         // set the view's size, margins, paddings and layout parameters
         v.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,7 +170,48 @@ public class RatingDataAdapter extends RecyclerView.Adapter<RatingDataAdapter.Vi
 
     public void reloadData()
     {
-        mDataset = databaseHandler.getAllRatings();
+        mDataset = sortRatings(filterRatings(databaseHandler.getAllRatings()));
         this.notifyDataSetChanged();
+    }
+
+    private ArrayList<RatingDataModel> filterRatings(ArrayList<RatingDataModel> ratings)
+    {
+        ArrayList<RatingDataModel> filteredRatings = new ArrayList<>();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        String filter = prefs.getString("filter", "Alle");
+
+        if(filter == null || filter.equals("Alle"))
+            return ratings;
+
+        for(RatingDataModel rating : ratings)
+        {
+            if(rating.getPlaceTypes().contains(filter))
+               filteredRatings.add(rating);
+        }
+        return filteredRatings;
+    }
+
+    private ArrayList<RatingDataModel> sortRatings(ArrayList<RatingDataModel> ratings)
+    {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        String filter = prefs.getString("sort", "Locationbewertung");
+
+        if(filter == null)
+            return ratings;
+
+        if(filter.equals("Locationbewertung"))
+        {
+            Collections.sort(ratings, RatingComparators.RatingValueComparator);
+        }
+        else if (filter.equals("Locationname"))
+        {
+            Collections.sort(ratings, RatingComparators.RatingNameComparator);
+        }
+        else if (filter.equals("Locationtyp"))
+        {
+            Collections.sort(ratings, RatingComparators.RatingTypComparator);
+        }
+
+        return ratings;
     }
 }

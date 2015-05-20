@@ -7,7 +7,7 @@ import android.location.Location;
  */
 public enum LocationTypes {
 
-    anderes,
+    Anderes,
     Accounting,
     Flughafen,
     Freizeitpark,
@@ -109,7 +109,7 @@ public enum LocationTypes {
     {
         LocationTypes[] types = values();
         if(position > types.length)
-            return LocationTypes.anderes.name();
+            return LocationTypes.Anderes.name();
 
         LocationTypes type = types[position];
         return type.name();

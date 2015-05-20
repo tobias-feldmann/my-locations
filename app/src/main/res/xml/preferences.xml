@@ -6,7 +6,15 @@
         <!--android:defaultValue="true" />-->
     <ListPreference
         android:key="filter"
-        android:title="Location Filter"
+        android:defaultValue="Alle"
+        android:title="Bewertungs Filter"
         android:entries="@array/filter_entries"
-        android:entryValues="@array/filter_keys"/>
+        android:entryValues="@array/filter_entries"/>
+
+    <ListPreference
+        android:key="sort"
+        android:defaultValue="Locationbewertung"
+        android:title="Bewertungs Sortierung"
+        android:entries="@array/sort_entries"
+        android:entryValues="@array/sort_entries"/>
 </PreferenceScreen>
