@@ -64,7 +64,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + KEY_ID + " TEXT PRIMARY KEY," + KEY_NAME + " TEXT,"
                 + KEY_ADDRESS + " TEXT," + KEY_PLACE_TYPES + " TEXT," + KEY_PHONE_NUMBER + " TEXT,"
                 + KEY_PRICE_LEVEL + " INTEGER," + KEY_RATING + " REAL," + KEY_WEBSITE + " TEXT,"
-                + KEY_TIMESTAMP + " INTEGER," + KEY_SOUTHWEST_LATITUDE + " REAL," + KEY_SOUTHWEST_LONGITUDE + " REAL,"
+                + KEY_TIMESTAMP + " TEXT," + KEY_SOUTHWEST_LATITUDE + " REAL," + KEY_SOUTHWEST_LONGITUDE + " REAL,"
                 + KEY_NORTHEAST_LATITUDE + " REAL," + KEY_NORTHEAST_LONGITUDE + " REAL,"
                 + KEY_PRIVATE_RATING + " INTEGER," + KEY_COMMENT + " TEXT," +  KEY_LATITUDE + " REAL," + KEY_LONGITUDE + " REAL" + ")";
         db.execSQL(CREATE_CONTACTS_TABLE);
@@ -182,7 +182,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(KEY_PRICE_LEVEL, rating.getPriceLevel());
         values.put(KEY_RATING, rating.getRating());
         values.put(KEY_WEBSITE, rating.getWebsite());
-        values.put(KEY_TIMESTAMP, rating.getTimestamp()/1000);
+        values.put(KEY_TIMESTAMP, String.valueOf(rating.getTimestamp()));
         values.put(KEY_SOUTHWEST_LATITUDE, rating.getSouthWestLatitude());
         values.put(KEY_SOUTHWEST_LONGITUDE, rating.getSouthWestLongitude());
         values.put(KEY_NORTHEAST_LATITUDE, rating.getNorthEastLatitude());
@@ -205,7 +205,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         rating.setPriceLevel(Integer.parseInt(cursor.getString(5)));
         rating.setRating(Float.parseFloat(cursor.getString(6)));
         rating.setWebsite(cursor.getString(7));
-        rating.setTimestamp(Integer.parseInt(cursor.getString(8)) * 1000);
+        rating.setTimestamp(Long.valueOf(cursor.getString(8)));
         rating.setSouthWestLatitude(Double.parseDouble(cursor.getString(9)));
         rating.setSouthWestLongitude(Double.parseDouble(cursor.getString(10)));
         rating.setNorthEastLatitude(Double.parseDouble(cursor.getString(11)));

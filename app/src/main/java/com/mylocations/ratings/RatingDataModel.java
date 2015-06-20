@@ -176,4 +176,63 @@ public class RatingDataModel {
     {
         return PlacesUtil.createBoundsWithMinDiagonal((new LatLng(getLatitude(), getLongitude())));
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        RatingDataModel model = (RatingDataModel) o;
+
+        if (priceLevel != model.priceLevel) return false;
+        if (Float.compare(model.rating, rating) != 0) return false;
+        if (timestamp != model.timestamp) return false;
+        if (Double.compare(model.southWestLatitude, southWestLatitude) != 0) return false;
+        if (Double.compare(model.southWestLongitude, southWestLongitude) != 0) return false;
+        if (Double.compare(model.northEastLatitude, northEastLatitude) != 0) return false;
+        if (Double.compare(model.northEastLongitude, northEastLongitude) != 0) return false;
+        if (Double.compare(model.latitude, latitude) != 0) return false;
+        if (Double.compare(model.longitude, longitude) != 0) return false;
+        if (privateRating != model.privateRating) return false;
+        if (id != null ? !id.equals(model.id) : model.id != null) return false;
+        if (name != null ? !name.equals(model.name) : model.name != null) return false;
+        if (address != null ? !address.equals(model.address) : model.address != null) return false;
+        if (placeTypes != null ? !placeTypes.equals(model.placeTypes) : model.placeTypes != null)
+            return false;
+        if (phoneNumber != null ? !phoneNumber.equals(model.phoneNumber) : model.phoneNumber != null)
+            return false;
+        if (website != null ? !website.equals(model.website) : model.website != null) return false;
+        return !(comment != null ? !comment.equals(model.comment) : model.comment != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (address != null ? address.hashCode() : 0);
+        result = 31 * result + (placeTypes != null ? placeTypes.hashCode() : 0);
+        result = 31 * result + (phoneNumber != null ? phoneNumber.hashCode() : 0);
+        result = 31 * result + priceLevel;
+        result = 31 * result + (rating != +0.0f ? Float.floatToIntBits(rating) : 0);
+        result = 31 * result + (website != null ? website.hashCode() : 0);
+        result = 31 * result + (int) (timestamp ^ (timestamp >>> 32));
+        temp = Double.doubleToLongBits(southWestLatitude);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(southWestLongitude);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(northEastLatitude);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(northEastLongitude);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(latitude);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(longitude);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + privateRating;
+        result = 31 * result + (comment != null ? comment.hashCode() : 0);
+        return result;
+    }
 }
