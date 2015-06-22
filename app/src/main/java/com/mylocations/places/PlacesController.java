@@ -6,6 +6,8 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.maps.model.LatLngBounds;
 
 /**
+ * Controller welcher die aktuell gewählte Location verwaltet
+ *
  * Created by Tobias Feldmann on 29.04.15.
  */
 public class PlacesController {

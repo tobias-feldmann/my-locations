@@ -7,6 +7,8 @@ import com.mylocations.database.DatabaseHandler;
 import com.mylocations.ratings.RatingDataModel;
 
 /**
+ * Testklasse für Datenbanktests
+ *
  * Created by Tobias Feldmann on 17.06.15.
  */
 public class DBTesting extends AndroidTestCase {
@@ -21,6 +23,9 @@ public class DBTesting extends AndroidTestCase {
     }
 
 
+    /**
+     * Test, welcher das Speichern und Laden von Bewertungsobjekten testet
+     */
     public void testInsertData()
     {
         RatingDataModel testModel = new RatingDataModel();

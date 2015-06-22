@@ -7,6 +7,8 @@ import com.mylocations.places.PlacesUtil;
 import java.util.ArrayList;
 
 /**
+ * DataModel einer Bewertung mit den nötigen Werten zur Location und Userbewertung
+ *
  * Created by Tobias Feldmann on 26.12.14.
  */
 public class RatingDataModel {

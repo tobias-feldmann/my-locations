@@ -14,12 +14,18 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.mylocations.DetailActivity;
 
 /**
+ * Helper-Klasse für den Google PlacesPicker
+ *
  * Created by Tobias Feldmann on 29.04.15.
  */
 public class PlacesUtil {
 
     private static final int PLACE_PICKER_REQUEST = 1;
 
+    /**
+     * Startet die PlacePicker-Activity
+     *
+     */
     public static void showPlacesPicker()
     {
         Activity activity = PlacesController.getInstance().getMainActivity();
@@ -34,6 +40,10 @@ public class PlacesUtil {
         }
     }
 
+    /**
+     * Startet die PlacePicker-Activity mit einer bestimmten Anfangsposition
+     *
+     */
     public static void showPlacesPicker(LatLngBounds bounds)
     {
         Activity activity = PlacesController.getInstance().getMainActivity();
@@ -50,6 +60,15 @@ public class PlacesUtil {
     }
 
 
+    /**
+     * Methode die das Ergebnis des PlacePickers (Wahl einer Location des Users) weiterverarbeitet und
+     * die DetailActivity startet
+     *
+     * @param requestCode   requestCode
+     * @param resultCode    resultCode
+     * @param data          intent mit den benötigten Daten
+     * @param activity      die activity
+     */
     public static void handlePlacesResult(int requestCode, int resultCode, Intent data, Activity activity)
     {
         Context context = activity.getApplicationContext();
@@ -64,15 +83,18 @@ public class PlacesUtil {
 
     }
 
+    /**
+     * Methode die ein LatLngBounds-Objekt (Rechteckiger-Bereich) mit dem übergebenen Punkt als
+     * Mitte erstellt und einen bestimmten Zoomfaktor miteinberechnet.
+     *
+     * @param centerPoint Koordinaten des Mittelpunkts
+     * @return das LatLngBounds-Objekt
+     */
     public static LatLngBounds createBoundsWithMinDiagonal(LatLng centerPoint) {
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
         builder.include(centerPoint);
 
         LatLngBounds tmpBounds = builder.build();
-        /** Add 2 points 1000m northEast and southWest of the center.
-         * They increase the bounds only, if they are not already larger
-         * than this.
-         * 1000m on the diagonal translates into about 709m to each direction. */
         LatLng center = tmpBounds.getCenter();
         LatLng northEast = move(center, 300, 300);
         LatLng southWest = move(center, -300, -300);
@@ -82,10 +104,7 @@ public class PlacesUtil {
     }
 
     private static final double EARTHRADIUS = 6366198;
-    /**
-     * Create a new LatLng which lies toNorth meters north and toEast meters
-     * east of startLL
-     */
+
     private static LatLng move(LatLng startLL, double toNorth, double toEast) {
         double lonDiff = meterToLongitude(toEast, startLL.latitude);
         double latDiff = meterToLatitude(toNorth);

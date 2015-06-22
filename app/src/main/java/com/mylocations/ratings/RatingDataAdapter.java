@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 /**
+ * DataAdapter welcher die Bewertungsobjekte im Recyclerview verwaltet
+ *
  * Created by Tobias Feldmann on 23.12.14.
  */
 public class RatingDataAdapter extends RecyclerView.Adapter<RatingDataAdapter.ViewHolder> {
@@ -32,11 +34,8 @@ public class RatingDataAdapter extends RecyclerView.Adapter<RatingDataAdapter.Vi
     private DatabaseHandler databaseHandler;
     private Context context;
 
-    // Provide a reference to the views for each data item
-    // Complex data items may need more than one view per item, and
-    // you provide access to all the views for a data item in a view holder
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        // each data item is just a string in this case
+
         public TextView mNameTextView;
         public TextView mTypeTextView;
         public TextView mAddressTextView;
@@ -56,21 +55,19 @@ public class RatingDataAdapter extends RecyclerView.Adapter<RatingDataAdapter.Vi
         mDataset = new ArrayList<>();
     }
 
-    // Create new views (invoked by the layout manager)
     @Override
     public RatingDataAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        // create a new view
+
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.rating_list_item, parent, false);
         final SwipeLayout swipeLayout = (SwipeLayout) v.findViewById(R.id.swipeLayout);
         swipeLayout.addSwipeListener(new SwipeLayout.SwipeListener() {
             @Override
             public void onClose(SwipeLayout layout) {
-                //when the SurfaceView totally cover the BottomView.
             }
 
             @Override
             public void onUpdate(SwipeLayout layout, int leftOffset, int topOffset) {
-                //you are swiping.
+
             }
 
             @Override
@@ -80,7 +77,7 @@ public class RatingDataAdapter extends RecyclerView.Adapter<RatingDataAdapter.Vi
 
             @Override
             public void onOpen(SwipeLayout layout) {
-                //when the BottomView totally show.
+
             }
 
             @Override
@@ -90,10 +87,10 @@ public class RatingDataAdapter extends RecyclerView.Adapter<RatingDataAdapter.Vi
 
             @Override
             public void onHandRelease(SwipeLayout layout, float xvel, float yvel) {
-                //when user's hand released.
+
             }
         });
-        // set the view's size, margins, paddings and layout parameters
+
         v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -142,11 +139,9 @@ public class RatingDataAdapter extends RecyclerView.Adapter<RatingDataAdapter.Vi
         return new ViewHolder(v);
     }
 
-    // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        // - get element from your dataset at this position
-        // - replace the contents of the view with that element
+
         RatingDataModel dataModel = mDataset.get(position);
         holder.mNameTextView.setText(dataModel.getName());
         holder.mNameTextView.setTypeface(Typeface.DEFAULT_BOLD);
@@ -162,18 +157,26 @@ public class RatingDataAdapter extends RecyclerView.Adapter<RatingDataAdapter.Vi
 
     }
 
-    // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
         return mDataset.size();
     }
 
+    /**
+     * Läd die Bewertungsobjekte aus der Datenbank neu
+     */
     public void reloadData()
     {
         mDataset = sortRatings(filterRatings(databaseHandler.getAllRatings()));
         this.notifyDataSetChanged();
     }
 
+    /**
+     * Filtert die Bewertungen nach dem eingestellten Filter
+     *
+     * @param ratings die Bewertungsobjekte
+     * @return die gefilterten Bewertungsobjekte
+     */
     private ArrayList<RatingDataModel> filterRatings(ArrayList<RatingDataModel> ratings)
     {
         ArrayList<RatingDataModel> filteredRatings = new ArrayList<>();
@@ -191,6 +194,12 @@ public class RatingDataAdapter extends RecyclerView.Adapter<RatingDataAdapter.Vi
         return filteredRatings;
     }
 
+    /**
+     * Sortiert die Bewertungen nach der eingestellten Sortierung
+     *
+     * @param ratings die Bewertungsobjekte
+     * @return die sortierten Bewertungsobjekte
+     */
     private ArrayList<RatingDataModel> sortRatings(ArrayList<RatingDataModel> ratings)
     {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);

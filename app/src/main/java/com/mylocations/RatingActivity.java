@@ -27,14 +27,16 @@ import com.mylocations.utils.DividerItemDecoration;
 
 import java.util.ArrayList;
 
-
+/**
+ * RatingActivity in der alle Bewertungen angezeigt werden und zum PlacePicker + Settings
+ * navigiert werden kann
+ *
+ * Created by Tobias Feldmann on 29.04.15.
+ */
 public class RatingActivity extends ActionBarActivity {
 
-    private GoogleApiClient mGoogleApiClient;
-    private final int PLACE_PICKER_REQUEST = 1;
     private RecyclerView mRecyclerView;
     private RatingDataAdapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
     private DatabaseHandler databaseHandler;
 
     @Override
@@ -48,12 +50,7 @@ public class RatingActivity extends ActionBarActivity {
         Spannable text = new SpannableString(bar.getTitle());
         text.setSpan(new ForegroundColorSpan(Color.WHITE), 0, text.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
         bar.setTitle(text);
-//        mGoogleApiClient = new GoogleApiClient
-//                .Builder(this)
-//                .addApi(Places.PLACE_DETECTION_API)
-//                .addConnectionCallbacks(this)
-//                .addOnConnectionFailedListener(this)
-//                .build();
+
         PlacesController.getInstance().setMainActivity(this);
         databaseHandler = new DatabaseHandler(this);
         if(databaseHandler.isEmpty())
@@ -71,17 +68,14 @@ public class RatingActivity extends ActionBarActivity {
         });
         fab.attachToRecyclerView(mRecyclerView);
 
-        // use this setting to improve performance if you know that changes
-        // in content do not change the layout size of the RecyclerView
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
-        // use a linear layout manager
+
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
 
         mRecyclerView.setLayoutManager(llm);
 
-        // specify an adapter (see also next example)
         mAdapter = new RatingDataAdapter(this);
         mRecyclerView.setAdapter(mAdapter);
     }
@@ -99,7 +93,6 @@ public class RatingActivity extends ActionBarActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_map, menu);
         return true;
     }
@@ -112,12 +105,8 @@ public class RatingActivity extends ActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);

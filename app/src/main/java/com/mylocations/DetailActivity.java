@@ -31,7 +31,12 @@ import com.mylocations.utils.LocationTypes;
 
 import java.util.List;
 
-
+/**
+ * DetailActivity in welcher die Detailinformationen einer Location angezeigt werden
+ * und eine Bewertung erstellt werden kann.
+ *
+ * Created by Tobias Feldmann on 29.04.15.
+ */
 public class DetailActivity extends ActionBarActivity {
 
     private PlacesController placesController;
@@ -59,10 +64,6 @@ public class DetailActivity extends ActionBarActivity {
         ActionBar bar = getSupportActionBar();
         bar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.primary)));
         bar.setTitle("Details");
-//        Spannable text = new SpannableString(bar.getTitle());
-//        text.setSpan(new ForegroundColorSpan(Color.BLACK), 0, text.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-//        bar.setTitle(text);
-//        bar.setIcon(new ColorDrawable(getResources().getColor(android.R.color.transparent)));
         bar.setDisplayHomeAsUpEnabled(true);
 
         databaseHandler = new DatabaseHandler(this);
@@ -179,9 +180,14 @@ public class DetailActivity extends ActionBarActivity {
                 disableCommentEdit();
             }
         });
-
     }
 
+    /**
+     * Erstellung eines Strings aus den Location-Typ-Integers
+     *
+     * @param types die Location-Typ-Integers
+     * @return
+     */
     private String typesToString(List<Integer> types)
     {
         String returnString = "";
@@ -196,6 +202,9 @@ public class DetailActivity extends ActionBarActivity {
         return returnString;
     }
 
+    /**
+     * Speichern einer Bewertung
+     */
     private void saveObject()
     {
         ratingDataModel.setComment(commentEdit.getText().toString());
@@ -251,6 +260,9 @@ public class DetailActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Softkeyboard entfernen
+     */
     private void disableCommentEdit()
     {
         commentEdit.clearFocus();

@@ -1,8 +1,9 @@
 package com.mylocations.utils;
 
-import android.location.Location;
 
 /**
+ * Mögliche Location-Typen
+ *
  * Created by Tobias Feldmann on 13.05.15.
  */
 public enum LocationTypes {

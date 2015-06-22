@@ -16,21 +16,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * DatabaseHandler, welcher alle Datenbank-Methoden beinhaltet
+ *
  * Created by Tobias Feldmann on 04.05.15.
  */
 public class DatabaseHandler extends SQLiteOpenHelper {
 
-    // All Static variables
     // Database Version
     private static final int DATABASE_VERSION = 1;
 
     // Database Name
     private static final String DATABASE_NAME = "ratingsdb";
 
-    // Contacts table name
     private static final String TABLE_RATINGS = "ratings";
 
-    // Contacts Table Columns names
     private static final String KEY_ID = "id";
     private static final String KEY_NAME = "name";
     private static final String KEY_ADDRESS = "address";
@@ -73,19 +72,22 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     // Upgrading database
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // Drop older table if existed
+
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_RATINGS);
 
-        // Create tables again
         onCreate(db);
     }
 
+    /**
+     * Neue Bewertung speichern
+     *
+     * @param rating das Bewertungsobjekt
+     */
     public void addRating(RatingDataModel rating) {
         SQLiteDatabase db = this.getWritableDatabase();
 
-        // Inserting Row
         db.insert(TABLE_RATINGS, null, getContentFromRating(rating));
-        db.close(); // Closing database connection
+        db.close();
     }
 
     public RatingDataModel getRating(String id) {
@@ -106,6 +108,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return getRatingFromCursor(cursor);
     }
 
+    /**
+     * Prüfen ob Bewertung mit dieser ID bereits besteht
+     *
+     * @param id die jeweilige ObjektID
+     * @return true oder false
+     */
     public boolean existRating(String id) {
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -121,8 +129,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             return true;
     }
 
+    /**
+     * Prüfen ob Bewertungsobjekte in der Datenbank bestehen
+     *
+     * @return true wenn Datenbank leer
+     */
     public boolean isEmpty() {
-        // Select All Query
         String selectQuery = "SELECT  * FROM " + TABLE_RATINGS;
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -134,36 +146,46 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             return false;
     }
 
+    /**
+     * Alle Bewertungsobjekte aus Datenbank laden
+     *
+     * @return ArrayList mit allen Bewertungsobjekten
+     */
     public ArrayList<RatingDataModel> getAllRatings() {
         ArrayList<RatingDataModel> ratingList = new ArrayList<RatingDataModel>();
-        // Select All Query
         String selectQuery = "SELECT  * FROM " + TABLE_RATINGS;
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
 
-        // looping through all rows and adding to list
         if (cursor.moveToFirst()) {
             do {
-                // Adding rating to list
                 ratingList.add(getRatingFromCursor(cursor));
             } while (cursor.moveToNext());
         }
 
-        // return contact list
         return ratingList;
     }
 
+    /**
+     * Aktualisierung eines Bewertungsobjektes in der Datenbank
+     *
+     * @param rating das zu aktualisierende Bewertungsobjekt
+     * @return
+     */
     public int updateRating(RatingDataModel rating) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = getContentFromRating(rating);
-
-        // updating row
         return db.update(TABLE_RATINGS, values, KEY_ID + " = ?",
                 new String[] { String.valueOf(rating.getId()) });
     }
 
+    /**
+     * Bewertungsobjekt löschen
+     *
+     * @param id ID von dem zu löschenden Bewertungsobjekt
+     */
     public void deleteRating(String id) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_RATINGS, KEY_ID + " = ?",
@@ -171,6 +193,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.close();
     }
 
+    /**
+     * Alle Werte des Bewertungsobjektes in ein ContentValues-Objekt übertragen
+     *
+     * @param rating das Bewertungsobjekt
+     * @return
+     */
     private ContentValues getContentFromRating(RatingDataModel rating)
     {
         ContentValues values = new ContentValues();
@@ -194,6 +222,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return values;
     }
 
+    /**
+     * Ein Bewertungsobjekt aus den Daten des Cursors erstellen
+     *
+     * @param cursor der Datenbank-Cursor
+     * @return das Bewertungsobjekt
+     */
     private RatingDataModel getRatingFromCursor(Cursor cursor)
     {
         RatingDataModel rating = new RatingDataModel();
@@ -215,35 +249,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         rating.setLatitude(Double.parseDouble(cursor.getString(15)));
         rating.setLongitude(Double.parseDouble(cursor.getString(16)));
         return rating;
-    }
-
-    public String typeListToString(ArrayList<Integer> types)
-    {
-        try {
-            JSONObject json = new JSONObject();
-            json.put("typeList", new JSONArray(types));
-            String arrayList = json.toString();
-            return arrayList;
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public ArrayList<Integer> typeStringToList(String types)
-    {
-        try {
-            ArrayList<Integer> itemList = new ArrayList<>();
-            JSONObject json = new JSONObject(types);
-            JSONArray items = json.optJSONArray("typeList");
-            for (int i = 0; i < items.length(); i++) {
-                itemList.add(items.getInt(i));
-            }
-            return itemList;
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
 }

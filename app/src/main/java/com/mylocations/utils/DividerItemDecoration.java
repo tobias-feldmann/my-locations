@@ -10,6 +10,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 /**
+ * Custom-Divider im Recyclerview
+ *
  * Created by Tobias Feldmann on 26.12.14.
  */
 public class DividerItemDecoration extends RecyclerView.ItemDecoration {

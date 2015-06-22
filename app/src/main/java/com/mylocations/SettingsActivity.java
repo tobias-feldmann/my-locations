@@ -16,6 +16,11 @@ import android.view.MenuItem;
 
 import com.mylocations.places.PlacesUtil;
 
+/**
+ * SettingsActivity mit den Einstellungen zur Filterung und Sortierung
+ *
+ * Created by Tobias Feldmann on 29.04.15.
+ */
 public class SettingsActivity extends ActionBarActivity {
 
     @Override
@@ -28,7 +33,6 @@ public class SettingsActivity extends ActionBarActivity {
         bar.setIcon(new ColorDrawable(getResources().getColor(android.R.color.transparent)));
         bar.setDisplayHomeAsUpEnabled(true);
 
-        // Display the fragment as the main content.
         getFragmentManager().beginTransaction()
                 .replace(android.R.id.content, new SettingsFragment())
                 .commit();
@@ -37,15 +41,9 @@ public class SettingsActivity extends ActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        //noinspection SimplifiableIfStatement
         if (id == android.R.id.home)
         {
-//            Intent intent = new Intent(this, RatingActivity.class);
-//            this.startActivity(intent);
             finish();
             return true;
         }
@@ -54,7 +52,11 @@ public class SettingsActivity extends ActionBarActivity {
     }
 
 
-
+    /**
+     * SettingsFragment welches vom PreferenceFragment erbt und das Preferences-XML lädt und anzeigt
+     * und das Laden und Speichern der Werte übernimmt
+     *
+     */
     public static class SettingsFragment extends PreferenceFragment {
         @Override
         public void onCreate(Bundle paramBundle) {
